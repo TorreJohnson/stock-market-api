@@ -7,26 +7,25 @@ import Stocks from "./Stocks";
 class App extends Component {
 	state = {
 		stocks: {
-			aapl: { name: "Apple", history: {} },
-			amzn: { name: "Amazon", history: {} },
-			fb: { name: "Facebook", history: {} },
-			msft: { name: "Microsoft", history: {} },
-			googl: { name: "Alphabet", history: {} }
-		},
-		stockSymbols: []
-	};
-
-	componentDidMount() {
-		this.addDefaultStockHistoryToState();
-	}
-
-	addDefaultStockHistoryToState = () => {
-		for (let stock in this.state.stocks) {
-			this.fetchStockPrices(stock);
+			aapl: {},
+			amzn: {},
+			fb: {},
+			msft: {},
+			googl: {}
 		}
 	};
 
-	fetchStockPrices(stockCode) {
+	componentDidMount() {
+		this.iterateThroughStocksInState();
+	}
+
+	iterateThroughStocksInState = () => {
+		for (let stock in this.state.stocks) {
+			this.fetchStockDetails(stock);
+		}
+	};
+
+	fetchStockDetails(stockCode) {
 		fetch(`https://api.iextrading.com/1.0/stock/${stockCode}/chart/1m`, {
 			headers: {
 				"Content-Type": "application/json",
@@ -42,7 +41,26 @@ class App extends Component {
 					}
 				});
 			});
+		fetch(`https://api.iextrading.com/1.0/stock/${stockCode}/company`, {
+			headers: {
+				"Content-Type": "application/json",
+				accept: "application/json"
+			}
+		})
+			.then(res => res.json())
+			.then(res => {
+				this.setState({
+					stocks: {
+						...this.state.stocks,
+						[stockCode]: { ...this.state.stocks[stockCode], ...res }
+					}
+				});
+			});
 	}
+
+	addAdditionalStocksToState = stockCode => {
+		this.fetchStockDetails(stockCode);
+	};
 
 	render() {
 		return (
@@ -55,7 +73,13 @@ class App extends Component {
 					<Route
 						exact
 						path="/"
-						render={props => <Stocks {...props} stocks={this.state.stocks} />}
+						render={props => (
+							<Stocks
+								{...props}
+								stocks={this.state.stocks}
+								newStockAddition={this.addAdditionalStocksToState}
+							/>
+						)}
 					/>
 				</div>
 			</div>

@@ -12,12 +12,24 @@ export default class Stocks extends Component {
 		});
 	};
 
+	handleSubmit = e => {
+		e.preventDefault();
+		this.props.newStockAddition(this.state.newStock);
+		this.setState({
+			newStock: ""
+		});
+	};
+
 	listStocks = () => {
 		let links = [];
 		for (let stock in this.props.stocks) {
+			let company = "";
+			if (this.props.stocks[stock].companyName) {
+				company = this.props.stocks[stock].companyName.split(" ")[0];
+			}
 			links.push(
-				<Link key={stock} to={`/stocks/${this.props.stocks[stock].name}`}>
-					{this.props.stocks[stock].name}: (NASDAQ: {stock.toUpperCase()})
+				<Link key={stock} to={`/stocks/${company}`}>
+					{this.props.stocks[stock].companyName} (NASDAQ: {stock.toUpperCase()})
 				</Link>
 			);
 		}
@@ -28,10 +40,7 @@ export default class Stocks extends Component {
 		return (
 			<div>
 				{this.listStocks()}
-				<Link key="aapl" to="/stocks/apple">
-					Apple (NASDAQ: AAPL)
-				</Link>
-				<form>
+				<form onSubmit={this.handleSubmit}>
 					<label>Add a stock to your list:</label>
 					<input
 						type="text"
