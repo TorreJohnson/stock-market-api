@@ -24,9 +24,12 @@ export default class Stocks extends Component {
 		let links = [];
 		for (let stock in this.props.stocks) {
 			links.push(
-				<Link key={stock} to={`/${stock}`}>
-					{this.props.stocks[stock].companyName} (NASDAQ: {stock.toUpperCase()})
-				</Link>
+				<div>
+					<Link key={stock} to={`/${stock}`}>
+						{this.props.stocks[stock].companyName} (NASDAQ:{" "}
+						{stock.toUpperCase()})
+					</Link>
+				</div>
 			);
 		}
 		return links;
