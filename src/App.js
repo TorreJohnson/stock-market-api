@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { Route } from "react-router-dom";
+import { Route, withRouter } from "react-router-dom";
 import Stocks from "./Stocks";
-import { Company } from "./CompanyDetails";
+import Company from "./CompanyDetails";
 
 class App extends Component {
 	state = {
@@ -108,4 +108,4 @@ class App extends Component {
 	}
 }
 
-export default App;
+export default withRouter(App);

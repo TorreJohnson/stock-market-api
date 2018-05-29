@@ -6,6 +6,8 @@ export default class Stocks extends Component {
 		newStock: ""
 	};
 
+	componentDidMount;
+
 	handleChange = e => {
 		this.setState({
 			newStock: e.target.value
