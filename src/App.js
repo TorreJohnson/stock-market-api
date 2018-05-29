@@ -3,6 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import { Route } from "react-router-dom";
 import Stocks from "./Stocks";
+import { Company } from "./CompanyDetails";
 
 class App extends Component {
 	state = {
@@ -56,6 +57,21 @@ class App extends Component {
 					}
 				});
 			});
+		fetch(`https://api.iextrading.com/1.0/stock/${stockCode}/logo`, {
+			headers: {
+				"Content-Type": "application/json",
+				accept: "application/json"
+			}
+		})
+			.then(res => res.json())
+			.then(res => {
+				this.setState({
+					stocks: {
+						...this.state.stocks,
+						[stockCode]: { ...this.state.stocks[stockCode], ...res }
+					}
+				});
+			});
 	}
 
 	addAdditionalStocksToState = stockCode => {
@@ -80,6 +96,11 @@ class App extends Component {
 								newStockAddition={this.addAdditionalStocksToState}
 							/>
 						)}
+					/>
+					<Route
+						exact
+						path="/:stock"
+						render={props => <Company {...props} stocks={this.state.stocks} />}
 					/>
 				</div>
 			</div>
