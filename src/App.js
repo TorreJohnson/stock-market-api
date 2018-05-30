@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import { Route } from "react-router-dom";
+import { Route, NavLink } from "react-router-dom";
 import { Stocks } from "./Stocks";
 import Company from "./CompanyDetails";
 
@@ -155,7 +155,9 @@ export default class App extends Component {
 							<a href="news.asp">Top Stocks</a>
 						</li>
 						<li className="right-floated">
-							<a href="/">Home</a>
+							<NavLink tag="a" to="/">
+								Home
+							</NavLink>
 						</li>
 					</ul>
 				</header>

@@ -10,25 +10,27 @@ export const Stocks = props => {
 			links.push(
 				<div key={cuid()}>
 					<div className="details">
-						<Link key={stock} to={`/${stock}`}>
-							{props.stocks[stock].companyName} (NASDAQ: {stock.toUpperCase()})
-						</Link>
-						{props.stocks[stock].fiveDayY ? (
-							<div>
-								<h4>
-									5-Day High:{" "}
-									{findFiveDayHighLowAve(props.stocks[stock].fiveDayY)[0]}
-								</h4>
-								<h4>
-									5-Day Low:{" "}
-									{findFiveDayHighLowAve(props.stocks[stock].fiveDayY)[1]}
-								</h4>
-								<h4>
-									5-Day Average:
-									{findFiveDayHighLowAve(props.stocks[stock].fiveDayY)[2]}
-								</h4>
-							</div>
-						) : null}
+						<div className="details-container">
+							<Link key={stock} to={`/${stock}`}>
+								{props.stocks[stock].companyName} (NASDAQ: {stock.toUpperCase()})
+							</Link>
+							{props.stocks[stock].fiveDayY ? (
+								<div>
+									<h4>
+										5-Day High:{" "}
+										{findFiveDayHighLowAve(props.stocks[stock].fiveDayY)[0]}
+									</h4>
+									<h4>
+										5-Day Low:{" "}
+										{findFiveDayHighLowAve(props.stocks[stock].fiveDayY)[1]}
+									</h4>
+									<h4>
+										5-Day Average:
+										{findFiveDayHighLowAve(props.stocks[stock].fiveDayY)[2]}
+									</h4>
+								</div>
+							) : null}
+						</div>
 					</div>
 					<div className="company-chart">
 						<Plot

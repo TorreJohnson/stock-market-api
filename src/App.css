@@ -5,10 +5,32 @@
 .details {
 	width: 30vw;
 	height: auto;
-	display: inline-block;
-	padding-top: 5em;
+	margin: 8% 0 0 10%;
 	border-radius: 10px 10px 10px 10px;
 	float: left;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	transition: 0.3s;
+	background-color: white;
+}
+
+.details:hover {
+	box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.details-container {
+	padding: 2px 16px;
+}
+
+.company-details {
+	width: 30vw;
+	height: auto;
+	margin: 0% 0 0 10%;
+	padding: 0.5% 2%;
+	border-radius: 10px 10px 10px 10px;
+	float: left;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	transition: 0.3s;
+	background-color: white;
 }
 
 .company-chart {

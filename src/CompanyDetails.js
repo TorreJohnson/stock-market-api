@@ -33,7 +33,7 @@ class Company extends React.Component {
 			<div>
 				{this.props.stocks[this.props.match.params.stock] ? (
 					<div>
-						<div className="details">
+						<div className="company-details">
 							<img
 								src={this.props.stocks[this.props.match.params.stock].url}
 								alt={
