@@ -22,68 +22,35 @@ export default class App extends Component {
 
 	iterateThroughStocksInState = () => {
 		for (let stockCode in this.state.stocks) {
-			this.groupedFetches(stockCode);
+			this.fetchStockInfo(stockCode);
 		}
 	};
 
-	fetchStockHistory(stockCode) {
-		fetch(`https://api.iextrading.com/1.0/stock/${stockCode}/chart/1y`, {
-			headers: {
-				"Content-Type": "application/json",
-				accept: "application/json"
+	fetchStockInfo(stockCode) {
+		fetch(
+			`https://api.iextrading.com/1.0/stock/${stockCode}/batch?types=chart,company,logo&range=1y`,
+			{
+				headers: {
+					"Content-Type": "application/json",
+					accept: "application/json"
+				}
 			}
-		})
+		)
 			.then(res => res.json())
 			.then(res => {
-				let fiveDayX = res.slice(-5).map(day => day.date);
-				let fiveDayY = res.slice(-5).map(day => day.close);
+				let fiveDayX = res.chart.slice(-5).map(day => day.date);
+				let fiveDayY = res.chart.slice(-5).map(day => day.close);
 				this.setState({
 					stocks: {
 						...this.state.stocks,
 						[stockCode]: {
 							...this.state.stocks[stockCode],
-							history: res,
+							history: res.chart,
 							fiveDayX: fiveDayX,
-							fiveDayY: fiveDayY
+							fiveDayY: fiveDayY,
+							...res.company,
+							url: res.logo.url
 						}
-					}
-				});
-			})
-			.catch(console.log);
-	}
-
-	fetchStockCompanyInfo(stockCode) {
-		fetch(`https://api.iextrading.com/1.0/stock/${stockCode}/company`, {
-			headers: {
-				"Content-Type": "application/json",
-				accept: "application/json"
-			}
-		})
-			.then(res => res.json())
-			.then(res => {
-				this.setState({
-					stocks: {
-						...this.state.stocks,
-						[stockCode]: { ...this.state.stocks[stockCode], ...res }
-					}
-				});
-			})
-			.catch(console.log);
-	}
-
-	fetchStockLogo(stockCode) {
-		fetch(`https://api.iextrading.com/1.0/stock/${stockCode}/logo`, {
-			headers: {
-				"Content-Type": "application/json",
-				accept: "application/json"
-			}
-		})
-			.then(res => res.json())
-			.then(res => {
-				this.setState({
-					stocks: {
-						...this.state.stocks,
-						[stockCode]: { ...this.state.stocks[stockCode], ...res }
 					}
 				});
 			})
@@ -92,16 +59,6 @@ export default class App extends Component {
 				alert("Invalid Stock Code. Please Try Again.");
 			});
 	}
-
-	groupedFetches(stockCode) {
-		this.fetchStockHistory(stockCode);
-		this.fetchStockCompanyInfo(stockCode);
-		this.fetchStockLogo(stockCode);
-	}
-
-	addAdditionalStocksToState = stockCode => {
-		this.groupedFetches(stockCode);
-	};
 
 	handleChange = e => {
 		this.setState({
@@ -112,7 +69,7 @@ export default class App extends Component {
 	handleSubmit = e => {
 		e.preventDefault();
 		if (this.state.newStock.length) {
-			this.addAdditionalStocksToState(this.state.newStock);
+			this.fetchStockInfo(this.state.newStock);
 			this.setState({
 				newStock: ""
 			});
