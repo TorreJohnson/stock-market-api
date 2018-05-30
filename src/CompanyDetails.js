@@ -11,7 +11,7 @@ class Company extends React.Component {
 		filteredX: [],
 		filteredY: [],
 		stockPrice: 0,
-		stockTime: 0,
+		stockTime: "n/a",
 		activeButton: ""
 	};
 

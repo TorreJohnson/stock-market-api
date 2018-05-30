@@ -106,12 +106,6 @@ export default class App extends Component {
 							<p>Add a stock:</p>
 						</li>
 						<li className="right-floated">
-							<a href="contact.asp">Contact</a>
-						</li>
-						<li className="right-floated">
-							<a href="news.asp">Top Stocks</a>
-						</li>
-						<li className="right-floated">
 							<NavLink tag="a" to="/">
 								Home
 							</NavLink>
