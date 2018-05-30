@@ -1,65 +1,31 @@
-import React, { Component } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import Plot from "react-plotly.js";
+import cuid from "cuid";
 
-export default class Stocks extends Component {
-	state = {
-		newStock: ""
-	};
-
-	handleChange = e => {
-		this.setState({
-			newStock: e.target.value
-		});
-	};
-
-	handleSubmit = e => {
-		e.preventDefault();
-		if (this.state.newStock.length) {
-			this.props.newStockAddition(this.state.newStock);
-			this.setState({
-				newStock: ""
-			});
-		} else {
-			alert("Please enter a valid NASDAQ symbol");
-		}
-	};
-
-	listStocks = () => {
+export const Stocks = props => {
+	let listStocks = () => {
 		let links = [];
-		for (let stock in this.props.stocks) {
+		for (let stock in props.stocks) {
 			links.push(
-				<div>
+				<div key={cuid()}>
 					<div className="details">
 						<Link key={stock} to={`/${stock}`}>
-							{this.props.stocks[stock].companyName} (NASDAQ:{" "}
-							{stock.toUpperCase()})
+							{props.stocks[stock].companyName} (NASDAQ: {stock.toUpperCase()})
 						</Link>
-						{this.props.stocks[stock].fiveDayY ? (
+						{props.stocks[stock].fiveDayY ? (
 							<div>
 								<h4>
 									5-Day High:{" "}
-									{
-										this.findFiveDayHighLowAve(
-											this.props.stocks[stock].fiveDayY
-										)[0]
-									}
+									{findFiveDayHighLowAve(props.stocks[stock].fiveDayY)[0]}
 								</h4>
 								<h4>
 									5-Day Low:{" "}
-									{
-										this.findFiveDayHighLowAve(
-											this.props.stocks[stock].fiveDayY
-										)[1]
-									}
+									{findFiveDayHighLowAve(props.stocks[stock].fiveDayY)[1]}
 								</h4>
 								<h4>
 									5-Day Average:
-									{
-										this.findFiveDayHighLowAve(
-											this.props.stocks[stock].fiveDayY
-										)[2]
-									}
+									{findFiveDayHighLowAve(props.stocks[stock].fiveDayY)[2]}
 								</h4>
 							</div>
 						) : null}
@@ -68,8 +34,8 @@ export default class Stocks extends Component {
 						<Plot
 							data={[
 								{
-									x: this.props.stocks[stock].fiveDayX,
-									y: this.props.stocks[stock].fiveDayY,
+									x: props.stocks[stock].fiveDayX,
+									y: props.stocks[stock].fiveDayY,
 									type: "scatter",
 									mode: "lines+points"
 								}
@@ -86,7 +52,7 @@ export default class Stocks extends Component {
 		return links;
 	};
 
-	findFiveDayHighLowAve = stockPrices => {
+	let findFiveDayHighLowAve = stockPrices => {
 		let high = 0;
 		let low = stockPrices[0];
 		let ave = 0;
@@ -103,26 +69,5 @@ export default class Stocks extends Component {
 		return [high, low, ave];
 	};
 
-	render() {
-		console.log(this.props.stocks);
-		return (
-			<div>
-				<div className="details">
-					<div className="form details">
-						<form onSubmit={this.handleSubmit}>
-							<label>Add a stock to your list:</label>
-							<input
-								type="text"
-								placeholder="Enter NASDAQ symbol"
-								value={this.state.newStock}
-								onChange={this.handleChange}
-							/>
-							<input type="submit" value="Add Stock" />
-						</form>
-					</div>
-				</div>
-				{this.listStocks()}
-			</div>
-		);
-	}
-}
+	return <div>{listStocks()}</div>;
+};

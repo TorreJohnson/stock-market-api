@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { Route } from "react-router-dom";
-import Stocks from "./Stocks";
+import { Stocks } from "./Stocks";
 import Company from "./CompanyDetails";
 
 export default class App extends Component {
@@ -13,7 +12,8 @@ export default class App extends Component {
 			fb: {},
 			msft: {},
 			googl: {}
-		}
+		},
+		newStock: ""
 	};
 
 	componentDidMount() {
@@ -103,12 +103,59 @@ export default class App extends Component {
 		this.groupedFetches(stockCode);
 	};
 
+	handleChange = e => {
+		this.setState({
+			newStock: e.target.value
+		});
+	};
+
+	handleSubmit = e => {
+		e.preventDefault();
+		if (this.state.newStock.length) {
+			this.addAdditionalStocksToState(this.state.newStock);
+			this.setState({
+				newStock: ""
+			});
+		} else {
+			alert("Please enter a valid NASDAQ symbol");
+		}
+	};
+
 	render() {
 		return (
 			<div className="App">
-				<header className="App-header">
-					<img src={logo} className="App-logo" alt="logo" />
-					<h1 className="App-title">Welcome to Stockist</h1>
+				<header>
+					<ul>
+						<li>
+							<img src="./stocks.png" alt="stockist" id="logo" />
+						</li>
+						<li>
+							<h2>Welcome to Stockist</h2>
+						</li>
+						<li>
+							<a href="/">Home</a>
+						</li>
+						<li>
+							<a href="news.asp">Top Stocks</a>
+						</li>
+						<li>
+							<a href="contact.asp">Contact</a>
+						</li>
+						<li>
+							<div className="form">
+								<form onSubmit={this.handleSubmit}>
+									<label>Add a stock to your list:</label>
+									<input
+										type="text"
+										placeholder="Enter NASDAQ symbol"
+										value={this.state.newStock}
+										onChange={this.handleChange}
+									/>
+									<input type="submit" value="Add Stock" />
+								</form>
+							</div>
+						</li>
+					</ul>
 				</header>
 				<div>
 					<Route

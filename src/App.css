@@ -77,3 +77,42 @@
 	color: #385997;
 	border-color: #385997;
 }
+
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #333;
+}
+
+li {
+	float: left;
+}
+
+li a {
+	display: block;
+	color: #d9d8db;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+	background-color: #111;
+}
+
+#logo {
+	max-width: 4vw;
+	height: auto;
+	display: inline-block;
+	margin: 0.5em;
+}
+
+li h2 {
+	display: inline-block;
+	color: #d9d8db;
+	position: relative;
+	top: 50%;
+}
