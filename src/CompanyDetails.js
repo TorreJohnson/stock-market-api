@@ -5,9 +5,11 @@ import io from "socket.io-client";
 
 class Company extends React.Component {
 	state = {
-		filter: "",
+		filter: "One Year",
 		x: [],
 		y: [],
+		filteredX: [],
+		filteredY: [],
 		stockPrice: 0
 	};
 
@@ -18,6 +20,7 @@ class Company extends React.Component {
 			this.props.history.push("/");
 		} else {
 			this.webSocket();
+			let dateRange = 0;
 			let x = this.props.stocks[this.props.match.params.stock].history.map(
 				day => day.date
 			);
@@ -26,10 +29,38 @@ class Company extends React.Component {
 			);
 			this.setState({
 				x: x,
-				y: y
+				y: y,
+				filteredX: x,
+				filteredY: y
 			});
 		}
 	}
+
+	handleDateRangeChange = e => {
+		this.setState(
+			{
+				filter: e.target.value
+			},
+			() => {
+				this.adjustChartValues();
+			}
+		);
+	};
+
+	adjustChartValues = () => {
+		let dateRange = 0;
+		if (this.state.filter === "Six Months") {
+			dateRange = -120;
+		} else if (this.state.filter === "One Month") {
+			dateRange = -20;
+		}
+		let x = this.state.x.slice(dateRange);
+		let y = this.state.y.slice(dateRange);
+		this.setState({
+			filteredX: x,
+			filteredY: y
+		});
+	};
 
 	webSocket() {
 		const socket = io.connect("https://ws-api.iextrading.com/1.0/last");
@@ -45,7 +76,6 @@ class Company extends React.Component {
 	}
 
 	render() {
-		console.log(this.state);
 		return (
 			<div>
 				{this.props.stocks[this.props.match.params.stock] ? (
@@ -88,8 +118,8 @@ class Company extends React.Component {
 								<Plot
 									data={[
 										{
-											x: this.state.x,
-											y: this.state.y,
+											x: this.state.filteredX,
+											y: this.state.filteredY,
 											type: "scatter",
 											mode: "lines+points",
 											marker: { color: "red" }
@@ -98,13 +128,48 @@ class Company extends React.Component {
 									layout={{
 										width: "50vw",
 										height: "auto",
-										title: "A Fancy Plot"
+										title: `${this.state.filter}`
 									}}
 								/>
 							</div>
+							<button value="One Year" onClick={this.handleDateRangeChange}>
+								One Year
+							</button>
+							<button value="Six Months" onClick={this.handleDateRangeChange}>
+								Six Months
+							</button>
+							<button value="One Month" onClick={this.handleDateRangeChange}>
+								One Month
+							</button>
 						</div>
 						<div className="lower-company-details">
-							Current Share Price: {this.state.stockPrice}
+							Current Share Price{" "}
+							<div>
+								{this.state.stockPrice >
+								this.state.y[this.state.y.length - 1] ? (
+									<div style={{ color: "green" }}>
+										<h2>
+											{this.state.stockPrice}
+											<img
+												src="./002-upload.png"
+												alt={this.state.stockPrice}
+												className="arrow"
+											/>
+										</h2>
+									</div>
+								) : (
+									<div style={{ color: "red" }}>
+										<h2>
+											{this.state.stockPrice}
+											<img
+												src="./001-download.png"
+												alt={this.state.stockPrice}
+												className="arrow"
+											/>
+										</h2>
+									</div>
+								)}
+							</div>
 						</div>
 					</div>
 				) : null}
