@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { Route, withRouter } from "react-router-dom";
+import { Route } from "react-router-dom";
 import Stocks from "./Stocks";
 import Company from "./CompanyDetails";
 
-class App extends Component {
+export default class App extends Component {
 	state = {
 		stocks: {
 			aapl: {},
@@ -21,13 +21,13 @@ class App extends Component {
 	}
 
 	iterateThroughStocksInState = () => {
-		for (let stock in this.state.stocks) {
-			this.fetchStockDetails(stock);
+		for (let stockCode in this.state.stocks) {
+			this.groupedFetches(stockCode);
 		}
 	};
 
-	fetchStockDetails(stockCode) {
-		fetch(`https://api.iextrading.com/1.0/stock/${stockCode}/chart/1m`, {
+	fetchStockHistory(stockCode) {
+		fetch(`https://api.iextrading.com/1.0/stock/${stockCode}/chart/1y`, {
 			headers: {
 				"Content-Type": "application/json",
 				accept: "application/json"
@@ -35,13 +35,24 @@ class App extends Component {
 		})
 			.then(res => res.json())
 			.then(res => {
+				let fiveDayX = res.slice(-5).map(day => day.date);
+				let fiveDayY = res.slice(-5).map(day => day.close);
 				this.setState({
 					stocks: {
 						...this.state.stocks,
-						[stockCode]: { ...this.state.stocks[stockCode], history: res }
+						[stockCode]: {
+							...this.state.stocks[stockCode],
+							history: res,
+							fiveDayX: fiveDayX,
+							fiveDayY: fiveDayY
+						}
 					}
 				});
-			});
+			})
+			.catch(console.log);
+	}
+
+	fetchStockCompanyInfo(stockCode) {
 		fetch(`https://api.iextrading.com/1.0/stock/${stockCode}/company`, {
 			headers: {
 				"Content-Type": "application/json",
@@ -56,7 +67,11 @@ class App extends Component {
 						[stockCode]: { ...this.state.stocks[stockCode], ...res }
 					}
 				});
-			});
+			})
+			.catch(console.log);
+	}
+
+	fetchStockLogo(stockCode) {
 		fetch(`https://api.iextrading.com/1.0/stock/${stockCode}/logo`, {
 			headers: {
 				"Content-Type": "application/json",
@@ -71,11 +86,21 @@ class App extends Component {
 						[stockCode]: { ...this.state.stocks[stockCode], ...res }
 					}
 				});
+			})
+			.catch(err => {
+				console.log(err);
+				alert("Invalid Stock Code. Please Try Again.");
 			});
 	}
 
+	groupedFetches(stockCode) {
+		this.fetchStockHistory(stockCode);
+		this.fetchStockCompanyInfo(stockCode);
+		this.fetchStockLogo(stockCode);
+	}
+
 	addAdditionalStocksToState = stockCode => {
-		this.fetchStockDetails(stockCode);
+		this.groupedFetches(stockCode);
 	};
 
 	render() {
@@ -83,7 +108,7 @@ class App extends Component {
 			<div className="App">
 				<header className="App-header">
 					<img src={logo} className="App-logo" alt="logo" />
-					<h1 className="App-title">Welcome to Stock Tracker</h1>
+					<h1 className="App-title">Welcome to Stockist</h1>
 				</header>
 				<div>
 					<Route
@@ -94,6 +119,7 @@ class App extends Component {
 								{...props}
 								stocks={this.state.stocks}
 								newStockAddition={this.addAdditionalStocksToState}
+								fiveDayData={this.state.fiveDayData}
 							/>
 						)}
 					/>
@@ -107,5 +133,3 @@ class App extends Component {
 		);
 	}
 }
-
-export default withRouter(App);

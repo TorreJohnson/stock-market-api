@@ -48,3 +48,32 @@
 .modebar {
 	display: none !important;
 }
+
+.form form {
+	display: flex;
+}
+
+.form input {
+	height: 30px;
+	padding-left: 10px;
+	border: 1px solid #c1c1c1;
+	margin-right: 10px;
+	border-radius: 20px;
+	flex: 3;
+}
+
+.form input:first-child {
+	flex: 1;
+}
+
+.form button {
+	color: #999;
+	border-radius: 5px;
+	border: 1px solid #999;
+}
+
+.form button:hover {
+	cursor: pointer;
+	color: #385997;
+	border-color: #385997;
+}
