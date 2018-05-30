@@ -10,7 +10,8 @@ class Company extends React.Component {
 		y: [],
 		filteredX: [],
 		filteredY: [],
-		stockPrice: 0
+		stockPrice: 0,
+		activeButton: ""
 	};
 
 	componentDidMount() {
@@ -20,7 +21,6 @@ class Company extends React.Component {
 			this.props.history.push("/");
 		} else {
 			this.webSocket();
-			let dateRange = 0;
 			let x = this.props.stocks[this.props.match.params.stock].history.map(
 				day => day.date
 			);
@@ -39,7 +39,8 @@ class Company extends React.Component {
 	handleDateRangeChange = e => {
 		this.setState(
 			{
-				filter: e.target.value
+				filter: e.target.value,
+				activeButton: e.target.value
 			},
 			() => {
 				this.adjustChartValues();
@@ -63,7 +64,7 @@ class Company extends React.Component {
 	};
 
 	webSocket() {
-		const socket = io.connect("https://ws-api.iextrading.com/1.0/last");
+		const socket = io("https://ws-api.iextrading.com/1.0/last");
 		socket.on("message", message => {
 			let res = JSON.parse(message);
 			this.setState({
@@ -88,7 +89,6 @@ class Company extends React.Component {
 										this.props.stocks[this.props.match.params.stock].companyName
 									}
 								/>
-
 								<h1>
 									{this.props.stocks[this.props.match.params.stock].companyName}
 								</h1>
@@ -131,16 +131,42 @@ class Company extends React.Component {
 										title: `${this.state.filter}`
 									}}
 								/>
+								<div>
+									<button
+										value="One Year"
+										onClick={this.handleDateRangeChange}
+										className={
+											this.state.activeButton === "One Year"
+												? "date-buttons active"
+												: "date-buttons"
+										}
+									>
+										One Year
+									</button>
+									<button
+										value="Six Months"
+										onClick={this.handleDateRangeChange}
+										className={
+											this.state.activeButton === "Six Months"
+												? "date-buttons active"
+												: "date-buttons"
+										}
+									>
+										Six Months
+									</button>
+									<button
+										value="One Month"
+										onClick={this.handleDateRangeChange}
+										className={
+											this.state.activeButton === "One Month"
+												? "date-buttons active"
+												: "date-buttons"
+										}
+									>
+										One Month
+									</button>
+								</div>
 							</div>
-							<button value="One Year" onClick={this.handleDateRangeChange}>
-								One Year
-							</button>
-							<button value="Six Months" onClick={this.handleDateRangeChange}>
-								Six Months
-							</button>
-							<button value="One Month" onClick={this.handleDateRangeChange}>
-								One Month
-							</button>
 						</div>
 						<div className="lower-company-details">
 							Current Share Price{" "}

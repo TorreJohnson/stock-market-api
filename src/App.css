@@ -8,6 +8,13 @@ body {
 	font-family: sans-serif;
 }
 
+.body {
+	background-color: #d3d3d3;
+	min-height: 100vh;
+	padding-top: 10vh;
+}
+
+/* Display Cards */
 .details {
 	width: 30vw;
 	height: auto;
@@ -41,7 +48,7 @@ body {
 
 .lower-company-details {
 	width: 34vw;
-	margin: 2% 0 0 10%;
+	margin: 0 0 0 10%;
 	height: auto;
 	border-radius: 10px 10px 10px 10px;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -60,6 +67,13 @@ body {
 	display: none !important;
 }
 
+.arrow {
+	width: 20px;
+	height: auto;
+	padding-left: 5px;
+}
+
+/* Navbar */
 .form form {
 	display: flex;
 	margin: 20px 0;
@@ -138,14 +152,25 @@ li h2 {
 	top: 50%;
 }
 
-.body {
-	background-color: #d3d3d3;
-	min-height: 100vh;
-	padding-top: 10vh;
+/* Date Range Buttons */
+.date-buttons {
+	background-color: white;
+	border: 2px solid #3773b3;
+	border-radius: 6px;
+	color: #3773b3;
+	padding: 16px 32px;
+	text-align: center;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	-webkit-transition-duration: 0.4s;
+	transition-duration: 0.4s;
+	cursor: pointer;
+	text-decoration: none;
 }
 
-.arrow {
-	width: 20px;
-	height: auto;
-	padding-left: 5px;
+.date-buttons:hover,
+.date-buttons.active {
+	background-color: #3773b3;
+	color: white;
 }
