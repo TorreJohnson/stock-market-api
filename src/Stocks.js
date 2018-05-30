@@ -17,16 +17,16 @@ export const Stocks = props => {
 							{props.stocks[stock].fiveDayY ? (
 								<div>
 									<h4>
-										5-Day High:{" "}
-										{findFiveDayHighLowAve(props.stocks[stock].fiveDayY)[0]}
+										High:{" $"}
+										{findFiveDayHighLowAve(props.stocks[stock].fiveDayY)[0]} USD
 									</h4>
 									<h4>
-										5-Day Low:{" "}
-										{findFiveDayHighLowAve(props.stocks[stock].fiveDayY)[1]}
+										Low:{" $"}
+										{findFiveDayHighLowAve(props.stocks[stock].fiveDayY)[1]} USD
 									</h4>
 									<h4>
-										5-Day Average:
-										{findFiveDayHighLowAve(props.stocks[stock].fiveDayY)[2]}
+										Average:{" $"}
+										{findFiveDayHighLowAve(props.stocks[stock].fiveDayY)[2]} USD
 									</h4>
 								</div>
 							) : null}
