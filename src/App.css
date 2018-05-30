@@ -37,7 +37,7 @@ body {
 .company-details {
 	width: 30vw;
 	height: auto;
-	margin: 0% 0 0 10%;
+	margin: 0 0 0 10%;
 	padding: 0.5% 2%;
 	border-radius: 10px 10px 10px 10px;
 	float: left;
@@ -55,6 +55,12 @@ body {
 	transition: 0.3s;
 	background-color: white;
 	clear: both;
+}
+
+@media only screen and (max-width: 1050px) {
+	.lower-company-details {
+		margin-top: 25px;
+	}
 }
 
 .company-chart {
@@ -136,6 +142,9 @@ li p {
 
 li a:hover {
 	background-color: #111;
+	padding: 30px 16px;
+	margin: 0;
+	height: 100%;
 }
 
 #logo {

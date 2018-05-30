@@ -11,6 +11,7 @@ class Company extends React.Component {
 		filteredX: [],
 		filteredY: [],
 		stockPrice: 0,
+		stockTime: 0,
 		activeButton: ""
 	};
 
@@ -20,6 +21,7 @@ class Company extends React.Component {
 		} else if (!this.props.stocks[this.props.match.params.stock].history) {
 			this.props.history.push("/");
 		} else {
+			window.scrollTo(0, 0);
 			this.webSocket();
 			let x = this.props.stocks[this.props.match.params.stock].history.map(
 				day => day.date
@@ -67,14 +69,39 @@ class Company extends React.Component {
 		const socket = io("https://ws-api.iextrading.com/1.0/last");
 		socket.on("message", message => {
 			let res = JSON.parse(message);
+			let time = new Date(res.time);
+			time = `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
 			this.setState({
-				stockPrice: res.price
+				stockPrice: res.price,
+				stockTime: time
 			});
 		});
 		socket.on("connect", () => {
 			socket.emit("subscribe", this.props.match.params.stock);
 		});
 	}
+
+	stockLowHighAve = () => {
+		let high = this.state.filteredY[0];
+		let low = this.state.filteredY[0];
+		let ave = 0;
+		for (let i = 0; i < this.state.filteredY.length; i++) {
+			if (this.state.filteredY[i] < low) {
+				low = this.state.filteredY[i];
+			} else if (this.state.filteredY[i] > high) {
+				high = this.state.filteredY[i];
+			}
+			ave += this.state.filteredY[i];
+		}
+		ave = (ave / this.state.filteredY.length).toFixed(2);
+		return (
+			<div>
+				<h3>High: {high}</h3>
+				<h3>Low: {low}</h3>
+				<h3>Average: {ave}</h3>
+			</div>
+		);
+	};
 
 	render() {
 		return (
@@ -169,7 +196,7 @@ class Company extends React.Component {
 							</div>
 						</div>
 						<div className="lower-company-details">
-							Current Share Price{" "}
+							Current Share Price (as of {this.state.stockTime})
 							<div>
 								{this.state.stockPrice >
 								this.state.y[this.state.y.length - 1] ? (
@@ -196,6 +223,7 @@ class Company extends React.Component {
 									</div>
 								)}
 							</div>
+							{this.stockLowHighAve()}
 						</div>
 					</div>
 				) : null}
