@@ -132,22 +132,12 @@ export default class App extends Component {
 						<li>
 							<h2>Welcome to Stockist</h2>
 						</li>
-						<li>
-							<a href="/">Home</a>
-						</li>
-						<li>
-							<a href="news.asp">Top Stocks</a>
-						</li>
-						<li>
-							<a href="contact.asp">Contact</a>
-						</li>
-						<li>
+						<li className="right-floated">
 							<div className="form">
 								<form onSubmit={this.handleSubmit}>
-									<label>Add a stock to your list:</label>
 									<input
 										type="text"
-										placeholder="Enter NASDAQ symbol"
+										placeholder="NASDAQ symbol..."
 										value={this.state.newStock}
 										onChange={this.handleChange}
 									/>
@@ -155,9 +145,21 @@ export default class App extends Component {
 								</form>
 							</div>
 						</li>
+						<li className="right-floated">
+							<p>Add a stock:</p>
+						</li>
+						<li className="right-floated">
+							<a href="contact.asp">Contact</a>
+						</li>
+						<li className="right-floated">
+							<a href="news.asp">Top Stocks</a>
+						</li>
+						<li className="right-floated">
+							<a href="/">Home</a>
+						</li>
 					</ul>
 				</header>
-				<div>
+				<div className="body">
 					<Route
 						exact
 						path="/"
